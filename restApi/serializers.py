@@ -3,9 +3,15 @@ from django.contrib.auth.models import User
 from .models import Post, Like
 
 
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ['amount']
+
+
 class PostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    likes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    likes = LikeSerializer(many=True)
 
     class Meta:
         model = Post
@@ -13,17 +19,17 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    likes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    # posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    # likes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'posts', 'likes']
+        fields = ['id', 'username']
 
-
-class LikeSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
+class UserPostSerializer(serializers.ModelSerializer):
+    posts = PostSerializer(many=True)
 
     class Meta:
-        model = Like
-        fields = ['id', 'amount', 'owner', 'post']
+        model = User
+        fields = ['posts']
+

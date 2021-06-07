@@ -7,8 +7,8 @@ urlpatterns = [
     path('users/<int:pk>/', views.UserDetail.as_view()),
     path('posts/', views.PostList.as_view()),
     path('posts/<int:pk>/', views.PostDetail.as_view()),
-    path('like/', views.LikeList.as_view()),
-    path('like/<int:pk>/', views.LikeDetail.as_view()),
+    # path('like/', views.LikeList.as_view()),
+    # path('like/<int:pk>/', views.LikeDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

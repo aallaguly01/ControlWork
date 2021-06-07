@@ -1,4 +1,7 @@
-from rest_framework import generics, permissions
+from django.contrib import auth
+from rest_framework import generics, permissions, request
+from rest_framework.generics import get_object_or_404
+
 from .models import Post, Like
 from .permissions import IsOwnerOrReadOnly
 from .serializers import PostSerializer
@@ -13,7 +16,8 @@ class UserList(generics.ListAPIView):
 
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
+    serializer_class = serializers.UserPostSerializer
+
 
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
@@ -30,16 +34,16 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
 
-class LikeList(generics.ListCreateAPIView):
-    queryset = Like.objects.all()
-    serializer_class = serializers.LikeSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-class LikeDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Like.objects.all()
-    serializer_class = serializers.LikeSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly]
+# class LikeList(generics.ListCreateAPIView):
+#     queryset = Like.objects.all()
+#     serializer_class = serializers.LikeSerializer
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+#
+#     def perform_create(self, serializer):
+#         serializer.save(owner=self.request.user)
+#
+# class LikeDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Like.objects.all()
+#     serializer_class = serializers.LikeSerializer
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+#                           IsOwnerOrReadOnly]
